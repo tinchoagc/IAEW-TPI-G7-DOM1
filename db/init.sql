@@ -17,3 +17,4 @@ CREATE TABLE appointments (
   scheduled_at TIMESTAMP NOT NULL,
   status TEXT DEFAULT 'CONFIRMED'
 );
+    
