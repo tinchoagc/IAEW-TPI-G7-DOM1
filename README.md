@@ -52,7 +52,7 @@ Se muestran los servicios desplegables y las dependencias tecnológicas principa
 **Propósito:**  
 Mostrar la estructura interna de la aplicación principal (API REST), sus capas lógicas y cómo se integran entre sí.
 
-![C3 – Componentes (API REST)](docs/c4/c3-componentesV2.png)
+![C3 – Componentes (API REST)](docs/c4/c3-componentes.png)
 
 **Componentes internos:**
 - **Auth/JWT Middleware:** valida tokens y roles.  
