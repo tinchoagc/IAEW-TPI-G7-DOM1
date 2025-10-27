@@ -11,6 +11,7 @@ security:
 tags:
   - name: Patients
   - name: Appointments
+  - name: Professionals
 
 paths:
   /patients:
@@ -46,6 +47,115 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Patient" }
+
+  /professionals:
+    get:
+      tags: [Professionals]
+      summary: Listar profesionales
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Professional" }
+    post:
+      tags: [Professionals]
+      summary: Crear profesional
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfessionalCreate"
+            examples:
+              ejemplo:
+                value:
+                  fullName: "Dr. Juan Pérez"
+                  specialty: "Medicina General"
+                  email: "juan.perez@example.com"
+                  phone: "+54-9-11-22222222"
+      responses:
+        "201":
+          description: Creado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Professional" }
+
+  /professionals/{id}:
+    get:
+      tags: [Professionals]
+      summary: Obtener profesional por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { $ref: "#/components/schemas/UUID" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Professional" }
+        "404":
+          description: No encontrado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+    put:
+      tags: [Professionals]
+      summary: Actualizar profesional
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { $ref: "#/components/schemas/UUID" }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfessionalCreate"
+            examples:
+              ejemplo:
+                value:
+                  fullName: "Dr. Juan Pérez"
+                  specialty: "Medicina Familiar"
+                  email: "juan.perez@example.com"
+                  phone: "+54-9-11-22222222"
+      responses:
+        "200":
+          description: Actualizado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Professional" }
+        "400":
+          description: Error de validación
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "404":
+          description: No encontrado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+    delete:
+      tags: [Professionals]
+      summary: Eliminar profesional
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { $ref: "#/components/schemas/UUID" }
+      responses:
+        "204":
+          description: Eliminado (sin contenido)
+        "404":
+          description: No encontrado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
 
   /appointments:
     post:
@@ -139,6 +249,30 @@ components:
       properties:
         fullName: { type: string }
         email: { type: string, format: email }
+        phone: { type: string, nullable: true }
+
+    Professional:
+      type: object
+      required: [id, fullName, specialty, createdAt]
+      properties:
+        id: { $ref: "#/components/schemas/UUID" }
+        fullName: { type: string, minLength: 1 }
+        specialty: { type: string }
+        email: { type: string, format: email, nullable: true }
+        phone: { type: string, nullable: true }
+        createdAt: { $ref: "#/components/schemas/ISODateTime" }
+        updatedAt:
+          allOf:
+            - $ref: "#/components/schemas/ISODateTime"
+          nullable: true
+
+    ProfessionalCreate:
+      type: object
+      required: [fullName, specialty]
+      properties:
+        fullName: { type: string }
+        specialty: { type: string }
+        email: { type: string, format: email, nullable: true }
         phone: { type: string, nullable: true }
 
     Appointment:

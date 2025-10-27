@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual envs
+venv/
+.venv/
+env/
+api/.venv/
+broker/.venv/
+
+# Environment files / secrets
+.env
+.env.*
+*.env
+secrets/
+*.key
+*.pem
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Docker
+docker-compose.override.yml
+Dockerfile.*
+*.tgz
+
+# IDEs / editors
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs / test artefacts
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / others
+node_modules/

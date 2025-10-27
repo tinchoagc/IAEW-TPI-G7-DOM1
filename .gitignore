@@ -1,0 +1,63 @@
+# Entorno Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+api/.venv/
+broker/.venv/
+
+# Archivos de configuración/secretos
+.env
+.env.* 
+*.env
+secrets/
+*.key
+*.pem
+
+# Dependencias/paquetes/build
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Tests / coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Migraciones y datos de DB locales
+migrations/
+db/*.db
+db/*.sqlite3
+db/init.sql   # opcional: si prefieres no trackear el init.sql, elimina esta línea
+db_data/
+postgres-data/
+pgdata/
+
+# Logs
+*.log
+logs/
+api/logs/
+broker/logs/
+
+# Docker / Compose
+docker-compose.override.yml
+**/Dockerfile.*.local
+
+# IDEs / editores
+.vscode/
+.idea/
+*.iml
+
+# SO
+.DS_Store
+Thumbs.db
+
+# Otros
+node_modules/
+coverage/
+dist/
