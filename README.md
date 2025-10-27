@@ -77,6 +77,27 @@ Mostrar la estructura interna de la aplicación principal (API REST), sus capas 
 
 ---
 
+### 🔹 C3 — Diagrama de Componentes (Worker de Recordatorios)
+**Propósito:**
+Mostrar la estructura interna del servicio asíncrono. Su única responsabilidad es procesar los pedidos de recordatorios (generados por la API) y enviarlos a los pacientes a través de un servicio externo.
+
+![C3 – Componentes (Worker)](docs/c4/c3-componentes-2.png)
+
+**Componentes internos:**
+- **ReminderConsumer:** Es el punto de entrada. Se conecta al bróker, consume los mensajes Reminder:Requested y pasa los datos del turno al servicio de notificación.
+- **NotificationService:** Contiene la lógica de negocio. Recibe los datos, formatea el texto final del mensaje y se lo entrega al cliente de mensajería.
+- **MessagingClient:** Actúa como adaptador. Recibe el mensaje formateado y realiza la llamada API al Servicio de Mensajería (externo) para despachar el email/SMS.
+
+**Dependencias externas:**
+- **Broker de Mensajes (RabbitMQ):** Lee y consume los mensajes Reminder:Requested de la cola.
+- **Servicio de Mensajería (externo):** Utiliza su API para enviar el email/SMS al paciente.
+
+**Flujo resumido de la transacción “Enviar Recordatorio”:**
+1. El ReminderConsumer consume un mensaje Reminder:Requested del Broker de Mensajes.
+2. Pasa los datos del mensaje al NotificationService.
+3. El NotificationService genera el texto del recordatorio y se lo pasa al MessagingClient.
+4. El MessagingClient realiza la llamada API al Servicio de Mensajería (externo) para que este envíe la notificación.
+
 
 ## 🧱 Decisiones Arquitectónicas (ADRs)
 
