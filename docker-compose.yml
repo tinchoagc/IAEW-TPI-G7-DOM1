@@ -42,6 +42,19 @@ services:
     ports:
       - "${RABBITMQ_PORT}:5672"
       - "15672:15672"   # management UI
+      
+  worker:
+    build:
+      context: ./broker
+    env_file: .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - RABBITMQ_URL=${RABBITMQ_URL}
+    depends_on:
+      - mq
+      - db
+    restart: unless-stopped
+
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0

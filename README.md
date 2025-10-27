@@ -274,3 +274,9 @@ Desde la raíz del proyecto:
 
 ```bash
 docker compose up --build
+```
+**Puede ejecutar el script** 
+```bash
+./run.sh
+``` 
+El script automáticamente elimina los contenedores actuales, levanta los de la aplicación y los muestra con `docker compose ps`
