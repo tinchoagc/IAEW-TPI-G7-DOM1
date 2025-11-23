@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 5s # Escanear cada 5 segundos
+
+scrape_configs:
+  - job_name: "fastapi"
+    # La ruta donde nuestra API expondrá las métricas (lo haremos luego en Python)
+    metrics_path: "/metrics"
+    static_configs:
+      # 'app' es el nombre del servicio en docker-compose que definiremos abajo
+      - targets: ["app:8000"]
