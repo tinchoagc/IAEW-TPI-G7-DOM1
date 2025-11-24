@@ -10,7 +10,6 @@ class Professional(Base):
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False) # Para el login
     
     specialty = Column(String, index=True) # Ej: "Cardiología"
     is_active = Column(Boolean, default=True)
@@ -20,5 +19,3 @@ class Professional(Base):
     # Relación: Un profesional puede tener muchos turnos
     appointments = relationship("Appointment", back_populates="professional")
     
-    # Podríamos agregar una tabla de "agenda" o "disponibilidad"
-    # pero por ahora lo mantenemos simple.

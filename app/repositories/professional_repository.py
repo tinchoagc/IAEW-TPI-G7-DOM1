@@ -1,22 +1,17 @@
 from sqlalchemy.orm import Session
 from app.models.professional import Professional
 from app.schemas import ProfessionalCreate
-from app.core.security import get_password_hash # Importamos la utilidad
 
 class ProfessionalRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def create(self, professional: ProfessionalCreate) -> Professional:
-        # HASHEAMOS la contraseña antes de guardar
-        hashed_pwd = get_password_hash(professional.password)
-        
+    def create(self, professional: ProfessionalCreate) -> Professional:    
         db_professional = Professional(
             first_name=professional.first_name,
             last_name=professional.last_name,
             email=professional.email,
             specialty=professional.specialty,
-            hashed_password=hashed_pwd, # Guardamos el hash, NO la plana
             is_active=True
         )
         self.db.add(db_professional)

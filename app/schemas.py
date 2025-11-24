@@ -35,12 +35,9 @@ class ProfessionalBase(BaseModel):
     specialty: Optional[str] = None
 
 class ProfessionalCreate(ProfessionalBase):
-    # Al crear un profesional, exigimos una contraseña
-    password: str
+    pass
 
 class Professional(ProfessionalBase):
-    # Al leer (devolver) un profesional, incluimos su ID
-    # pero NUNCA devolvemos el hashed_password
     id: int
     is_active: bool
     created_at: datetime
