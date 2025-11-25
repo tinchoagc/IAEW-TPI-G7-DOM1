@@ -18,7 +18,6 @@ class AppointmentService:
         self.professional_repo = ProfessionalRepository(db)
         self.webhook_client = WebhookClient()
 
-    # NOTA: Ahora definimos la función con 'async'
     async def create_appointment(self, data: AppointmentCreate) -> Appointment:
         # 1. Validar paciente
         if not self.patient_repo.get_by_id(data.patient_id):
@@ -39,16 +38,14 @@ class AppointmentService:
                 "appointment_id": new_appointment.id,
                 "patient_id": new_appointment.patient_id,
                 "professional_id": new_appointment.professional_id,
-                "date": str(new_appointment.start_time)
+                "date": str(new_appointment.start_time),
+                "status": "PENDING" # Estado inicial
             }
         }
-        # 'reminder.requested' es la "Routing Key" (la etiqueta del mensaje)
         await event_publisher.publish_message("reminder.requested", message)
         
         return new_appointment
 
-    # Las de lectura pueden seguir siendo normales (sync) o async, 
-    # pero por simplicidad las dejamos sync si no usan cosas asíncronas.
     def get_appointments_for_professional(self, professional_id: int) -> list[Appointment]:
         return self.appointment_repo.get_by_professional(professional_id)
 
@@ -58,7 +55,6 @@ class AppointmentService:
             raise HTTPException(status_code=404, detail="Turno no encontrado")
         return appointment
     
-    # --- NUEVA FUNCIÓN ---
     async def update_status(self, appointment_id: int, new_status: AppointmentStatus, webhook_url: str = None) -> Appointment:
         # 1. Buscar el turno
         appointment = self.appointment_repo.get_by_id(appointment_id)
@@ -69,17 +65,30 @@ class AppointmentService:
         appointment.status = new_status
         appointment.updated_at = datetime.utcnow()
         
-        # Guardamos en DB (Commit manual rápido para el ejemplo)
+        # Guardamos en DB
         self.appointment_repo.db.add(appointment)
         self.appointment_repo.db.commit()
         self.appointment_repo.db.refresh(appointment)
 
-        # 3. Integración: Disparar Webhook
-        # Solo si nos pasaron una URL (o si la tuviéramos configurada fija)
+        # 3. --- NUEVO: PUBLICAR A RABBITMQ (Para el Email) ---
+        # 👇 ESTE ES EL BLOQUE QUE FALTABA
+        message = {
+            "event": "AppointmentUpdated",
+            "data": {
+                "appointment_id": appointment.id,
+                "patient_id": appointment.patient_id,
+                "professional_id": appointment.professional_id,
+                "date": str(appointment.start_time),
+                "status": new_status.value # <--- ¡IMPORTANTE! Enviamos CONFIRMED o CANCELLED
+            }
+        }
+        # Usamos la misma routing key para que lo agarre el worker de notificaciones
+        await event_publisher.publish_message("reminder.requested", message)
+
+
+        # 4. Integración: Disparar Webhook (Sistema Externo)
         if webhook_url:
             event_name = f"appointment.{new_status.value.lower()}"
-            # Convertimos el modelo SQLAlchemy a Schema Pydantic para enviarlo limpio
-            # Ojo: Aquí pasamos el objeto DB, el cliente se encargará de sacar los datos
             await self.webhook_client.send_notification(webhook_url, event_name, appointment)
 
         return appointment

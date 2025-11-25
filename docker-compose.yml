@@ -30,10 +30,10 @@ services:
     build: .
     container_name: worker_turnos
     command: python -m app.worker
+    restart: always
     environment:
       DATABASE_URL: postgresql://postgres:tu_pass_db@db:5432/turnos_db
       RABBITMQ_URL: amqp://guest:guest@broker:5672/
-      # El worker también mandará trazas
       OTEL_SERVICE_NAME: "sistema-turnos-worker"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4318/v1/traces"
     volumes:
@@ -42,6 +42,7 @@ services:
       - turnos_net
     depends_on:
       - broker
+      - db
 
   # --- 3. Base de Datos (Negocio) ---
   db:
@@ -157,6 +158,16 @@ services:
       - ./config/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       # 3. Cargar el archivo JSON del Dashboard
       - ./config/grafana/dashboards_json:/var/lib/grafana/dashboards
+
+  # --- 11. Servidor de Email (Simulado) ---
+  mailpit:
+    image: axllent/mailpit
+    container_name: mail_server
+    ports:
+      - "8025:8025" # Interfaz Web (Tu Gmail local)
+      - "1025:1025" # Puerto SMTP (Donde el Worker manda el mail)
+    networks:
+      - turnos_net
 
 volumes:
   postgres_data:
