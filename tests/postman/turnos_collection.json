@@ -1,0 +1,1833 @@
+{
+	"info": {
+		"_postman_id": "b479601b-48dd-40e5-84b5-d5580427995b",
+		"name": "Sistema Turnos (TPI)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39800435"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "LoginRoman",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Login exitoso\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"token_roman\", jsonData.access_token);\r",
+									"\r",
+									"pm.environment.set(\"refresh_roman\", jsonData.refresh_token);\r",
+									"\r",
+									"console.log(\"¡Tokens de Roman actualizados (Access + Refresh)!\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "turnos_app",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "roman123",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak_url}}/realms/turnos_realm/protocol/openid-connect/token",
+							"host": [
+								"{{keycloak_url}}"
+							],
+							"path": [
+								"realms",
+								"turnos_realm",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "LoginExitoso",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "client_id",
+											"value": "turnos_app",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "roman123",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{keycloak_url}}/realms/turnos_realm/protocol/openid-connect/token",
+									"host": [
+										"{{keycloak_url}}"
+									],
+									"path": [
+										"realms",
+										"turnos_realm",
+										"protocol",
+										"openid-connect",
+										"token"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Cache-Control",
+									"value": "no-store"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "2383"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "SAMEORIGIN"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"access_token\": \"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJwbTlLZUNkR1R5VEh5NkN6dml0WmdYZFZhcVYyVGZuWWpvaHA1SE5wVUJzIn0.eyJleHAiOjE3NjQxOTA4OTEsImlhdCI6MTc2NDE5MDU5MSwianRpIjoiOWEzNTgzMzgtOGQ3ZS00ODE5LWJkYTctNjFhM2U2OTJhZDE0IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy90dXJub3NfcmVhbG0iLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiZGQ2MTFkMDgtNDNiYy00ZjNiLTllM2ItMGViOGEyNTZkMDU3IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoidHVybm9zX2FwcCIsInNlc3Npb25fc3RhdGUiOiI4MGE2YWY2Yi1lNTExLTQ5MDctYTBhOS01NDUwNTk1ZWM1NDMiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy10dXJub3NfcmVhbG0iLCJhcHBfcHJvZmVzc2lvbmFsIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsInNpZCI6IjgwYTZhZjZiLWU1MTEtNDkwNy1hMGE5LTU0NTA1OTVlYzU0MyIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IlJvbWFuIFJpcXVlbG1lIiwicHJlZmVycmVkX3VzZXJuYW1lIjoicm9tYW4xMjMiLCJnaXZlbl9uYW1lIjoiUm9tYW4iLCJmYW1pbHlfbmFtZSI6IlJpcXVlbG1lIiwiZW1haWwiOiJyb21hbkByaXF1ZWxtZS5jb20ifQ.P1cKZhkfOauiM9PWRk1QMMixzWb4b2uRp_xuYB9g1Fy-78KvWwkcEXH1zSrtojqdORVcyyR7bRMdGd2zsK1-mEMo7AIfxnw9Up2UJlAoSbKtjrFCo6yPHPdgYoQal32hTJXuLrfEYDlwfLHTPuDoO_mrcGgw8-H7YJwLrV8TtJ059B7_mA-VGb6CgJErHceCSSwvzV3AG_FAzpoVpvNW-Rl5pJ5f5nplcnqQzdN-HfQnm0WA226BtW7mYMhZ6ddJdywPtKj9bwiQmq_DTCrk-4nd68yvgBWwYBp9EblJvaAtoCULj30vqglvHG0-P9MReitu7kSJY99VHrHmm7W3OA\",\n    \"expires_in\": 300,\n    \"refresh_expires_in\": 1800,\n    \"refresh_token\": \"eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIwOWNkZGY0YS01OWFjLTRiZDgtYmQxYy1kYzc4OTg5YTAwNDUifQ.eyJleHAiOjE3NjQxOTIzOTEsImlhdCI6MTc2NDE5MDU5MSwianRpIjoiYTQyZjMwOGMtODI0NS00NGU0LWJlYTItYTcyMGI0MjMwNDkyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy90dXJub3NfcmVhbG0iLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvcmVhbG1zL3R1cm5vc19yZWFsbSIsInN1YiI6ImRkNjExZDA4LTQzYmMtNGYzYi05ZTNiLTBlYjhhMjU2ZDA1NyIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJ0dXJub3NfYXBwIiwic2Vzc2lvbl9zdGF0ZSI6IjgwYTZhZjZiLWU1MTEtNDkwNy1hMGE5LTU0NTA1OTVlYzU0MyIsInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsInNpZCI6IjgwYTZhZjZiLWU1MTEtNDkwNy1hMGE5LTU0NTA1OTVlYzU0MyJ9.6TH238TM--QBwCke7REyAZhpB5YNbJT-JTl-n0cKOdZntRNS-lr2FcebDoBkiu3EuPByYAfedfYz_vuS3MxFNA\",\n    \"token_type\": \"Bearer\",\n    \"not-before-policy\": 0,\n    \"session_state\": \"80a6af6b-e511-4907-a0a9-5450595ec543\",\n    \"scope\": \"profile email\"\n}"
+						},
+						{
+							"name": "LoginInvalido",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "client_id",
+											"value": "turnos_app",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "roman123",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "12345",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{keycloak_url}}/realms/turnos_realm/protocol/openid-connect/token",
+									"host": [
+										"{{keycloak_url}}"
+									],
+									"path": [
+										"realms",
+										"turnos_realm",
+										"protocol",
+										"openid-connect",
+										"token"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Cache-Control",
+									"value": "no-store"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "72"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "SAMEORIGIN"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"invalid_grant\",\n    \"error_description\": \"Invalid user credentials\"\n}"
+						},
+						{
+							"name": "LoginErrorConcesion",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "client_id",
+											"value": "turnos_app",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "roman123",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{keycloak_url}}/realms/turnos_realm/protocol/openid-connect/token",
+									"host": [
+										"{{keycloak_url}}"
+									],
+									"path": [
+										"realms",
+										"turnos_realm",
+										"protocol",
+										"openid-connect",
+										"token"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Cache-Control",
+									"value": "no-store"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "84"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "SAMEORIGIN"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"invalid_request\",\n    \"error_description\": \"Missing form parameter: grant_type\"\n}"
+						}
+					]
+				},
+				{
+					"name": "RefreshRoman",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Login exitoso\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"token_roman\", jsonData.access_token);\r",
+									"\r",
+									"pm.environment.set(\"refresh_roman\", jsonData.refresh_token);\r",
+									"\r",
+									"console.log(\"¡Tokens de Roman actualizados (Access + Refresh)!\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "turnos_app",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "refresh_token",
+									"type": "text"
+								},
+								{
+									"key": "refresh_token",
+									"value": "{{refresh_roman}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak_url}}/realms/turnos_realm/protocol/openid-connect/token",
+							"host": [
+								"{{keycloak_url}}"
+							],
+							"path": [
+								"realms",
+								"turnos_realm",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "RefreshExitoso",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "client_id",
+											"value": "turnos_app",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "refresh_token",
+											"type": "text"
+										},
+										{
+											"key": "refresh_token",
+											"value": "{{refresh_roman}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{keycloak_url}}/realms/turnos_realm/protocol/openid-connect/token",
+									"host": [
+										"{{keycloak_url}}"
+									],
+									"path": [
+										"realms",
+										"turnos_realm",
+										"protocol",
+										"openid-connect",
+										"token"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Cache-Control",
+									"value": "no-store"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "2383"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "SAMEORIGIN"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"access_token\": \"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJwbTlLZUNkR1R5VEh5NkN6dml0WmdYZFZhcVYyVGZuWWpvaHA1SE5wVUJzIn0.eyJleHAiOjE3NjQxOTEzNDIsImlhdCI6MTc2NDE5MTA0MiwianRpIjoiNmNlOWMzOGQtOGNiYS00ODZhLWEwYTEtZDlhN2IzMWMyMDFhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy90dXJub3NfcmVhbG0iLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiZGQ2MTFkMDgtNDNiYy00ZjNiLTllM2ItMGViOGEyNTZkMDU3IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoidHVybm9zX2FwcCIsInNlc3Npb25fc3RhdGUiOiI3Njk1NTZmNS02ODc5LTRjZjctOWJkNS0zYzQyMjVhOGIxMTkiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy10dXJub3NfcmVhbG0iLCJhcHBfcHJvZmVzc2lvbmFsIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsInNpZCI6Ijc2OTU1NmY1LTY4NzktNGNmNy05YmQ1LTNjNDIyNWE4YjExOSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IlJvbWFuIFJpcXVlbG1lIiwicHJlZmVycmVkX3VzZXJuYW1lIjoicm9tYW4xMjMiLCJnaXZlbl9uYW1lIjoiUm9tYW4iLCJmYW1pbHlfbmFtZSI6IlJpcXVlbG1lIiwiZW1haWwiOiJyb21hbkByaXF1ZWxtZS5jb20ifQ.trPTaBHA_rTwKkn_cD3h6wwGLGHjP34tjv90hxVCkn29g74g6MTifm-9u6K1Q0hW3Qlfhn40dEDV-oLb_43ZpnskBXp0cLM1GqEasD2_4wE3PpcNjhRAePgCkzNkUOQqC86XAUnJr8MW4c9RvYZwcx_Bon1vmVc_u3B9YqgHAGIzUtDkhCgKG_NLaWpc7KOVnIHm_layQmnD5j6omm2Z7NhUDW-p9ffz5WPrAHavUR4BtuMM-XZZewHYeLAoNmnOxxxvT0A4qGzjDk59hEdV4DjFeLq4MC4tm7J0rFZ5bSgcrWDgNkmkPWzHpM9zEpjCypZ-hOfRY0hoOsPq2itCfg\",\n    \"expires_in\": 300,\n    \"refresh_expires_in\": 1800,\n    \"refresh_token\": \"eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIwOWNkZGY0YS01OWFjLTRiZDgtYmQxYy1kYzc4OTg5YTAwNDUifQ.eyJleHAiOjE3NjQxOTI4NDIsImlhdCI6MTc2NDE5MTA0MiwianRpIjoiNzAwNDUzNGYtMjdlZi00MjkyLWFhZGMtZjMxNjA0YzVlNDlmIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy90dXJub3NfcmVhbG0iLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvcmVhbG1zL3R1cm5vc19yZWFsbSIsInN1YiI6ImRkNjExZDA4LTQzYmMtNGYzYi05ZTNiLTBlYjhhMjU2ZDA1NyIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJ0dXJub3NfYXBwIiwic2Vzc2lvbl9zdGF0ZSI6Ijc2OTU1NmY1LTY4NzktNGNmNy05YmQ1LTNjNDIyNWE4YjExOSIsInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsInNpZCI6Ijc2OTU1NmY1LTY4NzktNGNmNy05YmQ1LTNjNDIyNWE4YjExOSJ9.nD9rHtUWB2HskfjQKcPADZJzkpC9eshE2xCwIGKS906Pds0ELa6AUYOi0n5YN0OtvZLo3qGgKwWK7d0IpPkqGg\",\n    \"token_type\": \"Bearer\",\n    \"not-before-policy\": 0,\n    \"session_state\": \"769556f5-6879-4cf7-9bd5-3c4225a8b119\",\n    \"scope\": \"profile email\"\n}"
+						},
+						{
+							"name": "RefreshErrorToken",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "client_id",
+											"value": "turnos_app",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "refresh_token",
+											"type": "text"
+										},
+										{
+											"key": "refresh_token",
+											"value": "{{refresh_roman}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{keycloak_url}}/realms/turnos_realm/protocol/openid-connect/token",
+									"host": [
+										"{{keycloak_url}}"
+									],
+									"path": [
+										"realms",
+										"turnos_realm",
+										"protocol",
+										"openid-connect",
+										"token"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Cache-Control",
+									"value": "no-store"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "69"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "SAMEORIGIN"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"invalid_grant\",\n    \"error_description\": \"Invalid refresh token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "LoginLionel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 1. Verificamos que el login fue exitoso (200 OK)\r",
+									"pm.test(\"Login exitoso\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"// 2. Guardamos el Access Token (para usar la API ahora)\r",
+									"pm.environment.set(\"token_lio\", jsonData.access_token);\r",
+									"\r",
+									"// 3. Guardamos el Refresh Token (para renovar en el futuro)\r",
+									"pm.environment.set(\"refresh_lio\", jsonData.refresh_token);\r",
+									"\r",
+									"console.log(\"¡Tokens de Lio actualizados (Access + Refresh)!\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "turnos_app",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "lionel123",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "654321",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak_url}}/realms/turnos_realm/protocol/openid-connect/token",
+							"host": [
+								"{{keycloak_url}}"
+							],
+							"path": [
+								"realms",
+								"turnos_realm",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RefreshLionel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verificamos que el login fue exitoso (200 OK)\r",
+									"pm.test(\"Login exitoso\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Guardamos el token en la variable de entorno\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"token_lio\", jsonData.access_token);\r",
+									"console.log(\"Token de Lionel guardado!\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "turnos_app",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "refresh_token",
+									"type": "text"
+								},
+								{
+									"key": "refresh_token",
+									"value": "{{refresh_lio}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak_url}}/realms/turnos_realm/protocol/openid-connect/token",
+							"host": [
+								"{{keycloak_url}}"
+							],
+							"path": [
+								"realms",
+								"turnos_realm",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profesionales",
+			"item": [
+				{
+					"name": "ListarProfesionales",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/professionals/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"professionals",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscarProfesional",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/professionals/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"professionals",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "modificarProfesional",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  //\"first_name\": \"string\",\r\n  //\"last_name\": \"string\",\r\n  \"specialty\": \"Odontologo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/professionals/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"professionals",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EliminarProfesional (Logico)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/professionals/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"professionals",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token_roman}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Pacientes",
+			"item": [
+				{
+					"name": "ListarPacientes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/patients/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"patients",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscarPaciente",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/patients/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"patients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "modificarPaciente",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  //\"first_name\": \"string\",\r\n  //\"last_name\": \"string\",\r\n  \"phone\": \"111111111111\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/patients/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"patients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EliminarPaciente (Logico)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/patients/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"patients",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token_lio}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "FlujoCrearPaciente",
+			"item": [
+				{
+					"name": "AdminLogin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"admin_token\", jsonData.access_token);\r",
+									"console.log(\"Token Admin conseguido\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "admin-cli",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak_url}}/realms/master/protocol/openid-connect/token",
+							"host": [
+								"{{keycloak_url}}"
+							],
+							"path": [
+								"realms",
+								"master",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AltaKeycloak",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generamos datos random\r",
+									"var randomName = \"User\" + Math.floor(Math.random() * 1000);\r",
+									"var randomEmail = randomName.toLowerCase() + \"@test.com\";\r",
+									"\r",
+									"// LOS GUARDAMOS EN EL AMBIENTE PARA USARLOS LUEGO\r",
+									"pm.environment.set(\"demo_patient_firstname\", randomName);\r",
+									"pm.environment.set(\"demo_patient_lastname\", \"Automated\");\r",
+									"pm.environment.set(\"demo_patient_email\", randomEmail);\r",
+									"pm.environment.set(\"demo_patient_password\", \"112233\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{demo_patient_email}}\",\r\n    \"email\": \"{{demo_patient_email}}\",\r\n    \"firstName\": \"{{demo_patient_firstname}}\",\r\n    \"lastName\": \"{{demo_patient_lastname}}\",\r\n    \"enabled\": true,\r\n    \"emailVerified\": true,\r\n    \"credentials\": [\r\n        {\r\n            \"type\": \"password\",\r\n            \"value\": \"{{demo_patient_password}}\",\r\n            \"temporary\": false\r\n        }\r\n    ],\r\n    \"groups\": [\r\n        \"pacientes\" \r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{keycloak_url}}/admin/realms/turnos_realm/users",
+							"host": [
+								"{{keycloak_url}}"
+							],
+							"path": [
+								"admin",
+								"realms",
+								"turnos_realm",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AltaAPI",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Paciente sincronizado en DB\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"{{demo_patient_firstname}}\",\r\n    \"last_name\": \"{{demo_patient_lastname}}\",\r\n    \"email\": \"{{demo_patient_email}}\",\r\n    \"phone\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/patients/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"patients",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "FlujoCrearProfesional",
+			"item": [
+				{
+					"name": "AdminLogin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"admin_token\", jsonData.access_token);\r",
+									"console.log(\"Token Admin conseguido\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "admin-cli",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak_url}}/realms/master/protocol/openid-connect/token",
+							"host": [
+								"{{keycloak_url}}"
+							],
+							"path": [
+								"realms",
+								"master",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AltaKeycloak",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generamos datos random\r",
+									"var randomName = \"User\" + Math.floor(Math.random() * 1000);\r",
+									"var randomEmail = randomName.toLowerCase() + \"@test.com\";\r",
+									"\r",
+									"// LOS GUARDAMOS EN EL AMBIENTE PARA USARLOS LUEGO\r",
+									"pm.environment.set(\"demo_professional_firstname\", randomName);\r",
+									"pm.environment.set(\"demo_professional_lastname\", \"Automated\");\r",
+									"pm.environment.set(\"demo_professional_email\", randomEmail);\r",
+									"pm.environment.set(\"demo_professional_password\", \"332211\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{demo_professional_email}}\",\r\n    \"email\": \"{{demo_professional_email}}\",\r\n    \"firstName\": \"{{demo_professional_firstname}}\",\r\n    \"lastName\": \"{{demo_professional_lastname}}\",\r\n    \"enabled\": true,\r\n    \"emailVerified\": true,\r\n    \"credentials\": [\r\n        {\r\n            \"type\": \"password\",\r\n            \"value\": \"{{demo_professional_password}}\",\r\n            \"temporary\": false\r\n        }\r\n    ],\r\n    \"groups\": [\r\n        \"staff\" \r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{keycloak_url}}/admin/realms/turnos_realm/users",
+							"host": [
+								"{{keycloak_url}}"
+							],
+							"path": [
+								"admin",
+								"realms",
+								"turnos_realm",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AltaAPI",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Paciente sincronizado en DB\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"{{demo_professional_firstname}}\",\r\n    \"last_name\": \"{{demo_professional_lastname}}\",\r\n    \"email\": \"{{demo_professional_email}}\",\r\n    \"specialty\": \"Neurologo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/professionals/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"professionals",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Turnos",
+			"item": [
+				{
+					"name": "CrearTurno (el paciente)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_lio}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"start_time\": \"2025-11-26T21:08:06.052Z\",\r\n  \"end_time\": \"2025-12-26T21:08:06.052Z\",\r\n  \"notes\": \"Caso Exitoso\",\r\n  \"professional_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/appointments/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"appointments",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "TurnoExitoso",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"start_time\": \"2025-11-26T21:08:06.052Z\",\r\n  \"end_time\": \"2025-12-26T21:08:06.052Z\",\r\n  \"notes\": \"Caso Exitoso\",\r\n  \"professional_id\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/appointments/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"appointments",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 26 Nov 2025 21:10:53 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "230"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"start_time\": \"2025-11-26T21:08:06.052000Z\",\n    \"end_time\": \"2025-12-26T21:08:06.052000Z\",\n    \"notes\": \"Caso Exitoso\",\n    \"id\": 2,\n    \"patient_id\": 1,\n    \"professional_id\": 1,\n    \"status\": \"PENDING\",\n    \"created_at\": \"2025-11-26T21:10:54.201617Z\",\n    \"updated_at\": null\n}"
+						},
+						{
+							"name": "NoAutorizado",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/appointments/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"appointments",
+										""
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 26 Nov 2025 21:07:12 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "www-authenticate",
+									"value": "Bearer"
+								},
+								{
+									"key": "content-length",
+									"value": "30"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Not authenticated\"\n}"
+						},
+						{
+							"name": "ProfesionalNoEncontrado",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"start_time\": \"2025-11-26T21:08:06.052Z\",\r\n  \"end_time\": \"2025-12-26T21:08:06.052Z\",\r\n  \"notes\": \"string\",\r\n  \"professional_id\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/appointments/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"appointments",
+										""
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 26 Nov 2025 21:10:00 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "38"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Profesional no encontrado\"\n}"
+						}
+					]
+				},
+				{
+					"name": "CrearTurno (el profesional)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_roman}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"start_time\": \"2025-11-26T21:08:06.052Z\",\r\n  \"end_time\": \"2025-12-26T21:08:06.052Z\",\r\n  \"notes\": \"Lo que cambia es agregar el id del paciente\",\r\n  \"patient_id\": 1,\r\n  \"professional_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/appointments/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"appointments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listarTodosLosTurnos",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "VerAgenda",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_roman}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/appointments/me/agenda",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"appointments",
+								"me",
+								"agenda"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ActualizarTurno",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_roman}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/appointments/1/status?status=COMPLETED&webhook_url={{webhook_server}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"appointments",
+								"1",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "COMPLETED"
+								},
+								{
+									"key": "webhook_url",
+									"value": "{{webhook_server}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "ConfirmarExitoso",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/appointments/1/status?status=CONFIRMED&webhook_url={{webhook_server}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"appointments",
+										"1",
+										"status"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "CONFIRMED"
+										},
+										{
+											"key": "webhook_url",
+											"value": "{{webhook_server}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 26 Nov 2025 22:09:34 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "251"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"start_time\": \"2025-11-26T16:21:06.226000Z\",\n    \"end_time\": \"2025-11-26T16:21:06.226000Z\",\n    \"notes\": \"string\",\n    \"id\": 1,\n    \"patient_id\": 1,\n    \"professional_id\": 1,\n    \"status\": \"CONFIRMED\",\n    \"created_at\": \"2025-11-26T16:21:20.430153Z\",\n    \"updated_at\": \"2025-11-26T22:09:35.174411Z\"\n}"
+						},
+						{
+							"name": "CancelarExitoso",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/appointments/1/status?status=CANCELLED&webhook_url={{webhook_server}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"appointments",
+										"1",
+										"status"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "CANCELLED"
+										},
+										{
+											"key": "webhook_url",
+											"value": "{{webhook_server}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 26 Nov 2025 22:11:32 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "251"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"start_time\": \"2025-11-26T16:21:06.226000Z\",\n    \"end_time\": \"2025-11-26T16:21:06.226000Z\",\n    \"notes\": \"string\",\n    \"id\": 1,\n    \"patient_id\": 1,\n    \"professional_id\": 1,\n    \"status\": \"CANCELLED\",\n    \"created_at\": \"2025-11-26T16:21:20.430153Z\",\n    \"updated_at\": \"2025-11-26T22:11:33.259341Z\"\n}"
+						},
+						{
+							"name": "CompletadoExitoso",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/appointments/1/status?status=COMPLETED&webhook_url={{webhook_server}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"appointments",
+										"1",
+										"status"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "COMPLETED"
+										},
+										{
+											"key": "webhook_url",
+											"value": "{{webhook_server}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 26 Nov 2025 22:12:59 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "251"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"start_time\": \"2025-11-26T16:21:06.226000Z\",\n    \"end_time\": \"2025-11-26T16:21:06.226000Z\",\n    \"notes\": \"string\",\n    \"id\": 1,\n    \"patient_id\": 1,\n    \"professional_id\": 1,\n    \"status\": \"COMPLETED\",\n    \"created_at\": \"2025-11-26T16:21:20.430153Z\",\n    \"updated_at\": \"2025-11-26T22:13:00.688069Z\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

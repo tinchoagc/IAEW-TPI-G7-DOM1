@@ -13,7 +13,7 @@ class Professional(Base):
     
     specialty = Column(String, index=True) # Ej: "Cardiología"
     is_active = Column(Boolean, default=True)
-    
+    is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     # Relación: Un profesional puede tener muchos turnos

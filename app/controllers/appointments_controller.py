@@ -34,6 +34,17 @@ def get_professional_agenda(
 ):
     return service.get_appointments_for_professional(professional_id)
 
+@router.get("/", response_model=list[Appointment])
+def get_all_appointments(
+    skip: int = 0, 
+    limit: int = 100, 
+    service: AppointmentService = Depends(get_appointment_service)
+):
+    """
+    Obtiene TODOS los turnos del sistema (Paginado).
+    """
+    return service.get_all_appointments(skip, limit)
+
 @router.get("/{appointment_id}", response_model=Appointment)
 def get_appointment(
     appointment_id: int, 

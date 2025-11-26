@@ -67,6 +67,9 @@ class AppointmentService:
             raise HTTPException(status_code=404, detail="Turno no encontrado")
         return appointment
     
+    def get_all_appointments(self, skip: int = 0, limit: int = 100) -> list[Appointment]:
+            return self.appointment_repo.get_all(skip, limit)
+    
     async def update_status(self, appointment_id: int, new_status: AppointmentStatus, webhook_url: str = None) -> Appointment:
         appointment = self.appointment_repo.get_by_id(appointment_id)
         if not appointment:

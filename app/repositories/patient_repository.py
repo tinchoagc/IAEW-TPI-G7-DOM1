@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.patient import Patient
-from app.schemas import PatientCreate
+from app.schemas import PatientCreate, PatientUpdate
 
 class PatientRepository:
     def __init__(self, db: Session):
@@ -25,10 +25,33 @@ class PatientRepository:
     def get_by_email(self, email: str) -> Patient | None:
         return self.db.query(Patient).filter(Patient.email == email).first()
 
-    def get_all(self, skip: int = 0, limit: int = 100) -> list[Patient]:
-        return self.db.query(Patient).offset(skip).limit(limit).all()
+    def get_all(self, skip: int = 0, limit: int = 100):
+        return self.db.query(Patient).filter(Patient.is_active == True).offset(skip).limit(limit).all()
     
     # Agregado para obtener usuario del email
     def get_by_email(self, email: str):
         """Busca un paciente por su email exacto"""
         return self.db.query(Patient).filter(Patient.email == email).first()
+    
+    def update(self, id: int, data: PatientUpdate):
+        patient = self.get_by_id(id)
+        if not patient:
+            return None
+        
+        # Actualizamos solo los campos que vinieron
+        update_data = data.dict(exclude_unset=True)
+        for key, value in update_data.items():
+            setattr(patient, key, value)
+            
+        self.db.add(patient)
+        self.db.commit()
+        self.db.refresh(patient)
+        return patient
+
+    def delete(self, id: int):
+        patient = self.get_by_id(id)
+        if patient:
+            patient.is_active = False # <--- Soft Delete
+            self.db.commit()
+            return True
+        return False

@@ -1,9 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
-from app.models.appointment import AppointmentStatus # Reutilizamos el Enum
-
-from typing import Optional # <--- Asegúrate de tener este import
+from app.models.appointment import AppointmentStatus
 
 # --- Schemas de Patient ---
 
@@ -14,16 +12,20 @@ class PatientBase(BaseModel):
     phone: Optional[str] = None
 
 class PatientCreate(PatientBase):
-    # Al crear, no necesitamos nada extra por ahora
     pass
 
+# 👇 ESTO ES LO QUE FALTABA: Schema para actualizar (todo opcional)
+class PatientUpdate(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    phone: Optional[str] = None
+    # No incluimos email para evitar conflictos de unicidad en un update simple
+
 class Patient(PatientBase):
-    # Al leer (devolver) un paciente, sí incluimos su ID
     id: int
+    is_active: bool  # <--- Importante para ver si está borrado o no
     created_at: datetime
     
-    # Esta configuración permite que Pydantic lea datos
-    # directamente desde los modelos de SQLAlchemy (ej: patient.id)
     class Config:
         from_attributes = True
 
@@ -38,6 +40,12 @@ class ProfessionalBase(BaseModel):
 
 class ProfessionalCreate(ProfessionalBase):
     pass
+
+# 👇 ESTO TAMBIÉN FALTABA
+class ProfessionalUpdate(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    specialty: Optional[str] = None
 
 class Professional(ProfessionalBase):
     id: int
@@ -57,7 +65,7 @@ class AppointmentBase(BaseModel):
 
 class AppointmentCreate(AppointmentBase):
     # Al crear un turno, necesitamos saber de quién y para quién
-    # patient_id: int
+    # patient_id es opcional para permitir el auto-agendamiento (lógica de Messi)
     patient_id: Optional[int] = None
     professional_id: int
 
@@ -70,9 +78,5 @@ class Appointment(AppointmentBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
     
-    # Opcional: Podríamos anidar los datos del paciente/profesional
-    # patient: Patient
-    # professional: Professional
-
     class Config:
         from_attributes = True

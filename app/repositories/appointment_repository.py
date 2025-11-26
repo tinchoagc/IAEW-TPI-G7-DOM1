@@ -23,7 +23,7 @@ class AppointmentRepository:
     def get_by_id(self, appointment_id: int) -> Appointment | None:
         return self.db.query(Appointment).filter(Appointment.id == appointment_id).first()
 
-    def get_all(self, skip: int = 0, limit: int = 100) -> list[Appointment]:
+    def get_all(self, skip: int = 0, limit: int = 100):
         return self.db.query(Appointment).offset(skip).limit(limit).all()
 
     def get_by_professional(self, professional_id: int) -> list[Appointment]:

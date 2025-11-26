@@ -29,7 +29,9 @@ async def lifespan(app: FastAPI):
     await event_publisher.close()
 
 app = FastAPI(
-    title="API Rest - Sistema de Turnos",
+    title="Sistema de Turnos TPI",
+    description="API para gestión de pacientes, profesionales y turnos",
+    version="1.0.0",
     lifespan=lifespan
 )
 
