@@ -18,8 +18,33 @@ class AppointmentService:
         self.professional_repo = ProfessionalRepository(db)
         self.webhook_client = WebhookClient()
 
-    async def create_appointment(self, data: AppointmentCreate) -> Appointment:
-        # 1. Validar paciente
+    async def create_appointment(self, data: AppointmentCreate, user_email: str = None) -> Appointment:
+        
+        # --- 🕵️‍♂️ LÓGICA DE AUTO-DETECCIÓN DE PACIENTE ---
+        if data.patient_id is None:
+            # Caso 1: No mandó ID y tampoco vino email en el token (Raro, pero posible)
+            if not user_email:
+                raise HTTPException(
+                    status_code=400, 
+                    detail="Debe indicar el ID del paciente manual o estar logueado con un usuario válido."
+                )
+            
+            # Caso 2: Tenemos email, buscamos al paciente en la DB
+            print(f"🔍 Buscando paciente por email: {user_email}")
+            patient = self.patient_repo.get_by_email(user_email)
+            
+            if not patient:
+                # Caso 3: El usuario está logueado en Keycloak, pero no está en tu tabla 'patients'
+                raise HTTPException(
+                    status_code=403, 
+                    detail=f"El email {user_email} no tiene un perfil de Paciente asociado. Contacte administración."
+                )
+            
+            # ¡ÉXITO! Asignamos el ID encontrado automáticamente
+            data.patient_id = patient.id
+        # -----------------------------------------------------
+
+        # 1. Validar paciente (Ahora data.patient_id YA TIENE VALOR sí o sí)
         if not self.patient_repo.get_by_id(data.patient_id):
             raise HTTPException(status_code=404, detail="Paciente no encontrado")
 
@@ -39,7 +64,7 @@ class AppointmentService:
                 "patient_id": new_appointment.patient_id,
                 "professional_id": new_appointment.professional_id,
                 "date": str(new_appointment.start_time),
-                "status": "PENDING" # Estado inicial
+                "status": "PENDING"
             }
         }
         await event_publisher.publish_message("reminder.requested", message)

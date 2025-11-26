@@ -436,6 +436,32 @@
   "webAuthnPolicyPasswordlessExtraOrigins": [],
   "users": [
     {
+      "id": "31c06781-d779-4260-b109-44b7e14fe8b7",
+      "username": "lionel123",
+      "firstName": "Lionel",
+      "lastName": "Messi",
+      "email": "lio@messi.com",
+      "emailVerified": false,
+      "createdTimestamp": 1764117275105,
+      "enabled": true,
+      "totp": false,
+      "credentials": [
+        {
+          "id": "590c4ce9-5ffd-43ca-94ff-bef72ef3562e",
+          "type": "password",
+          "userLabel": "My password",
+          "createdDate": 1764117291722,
+          "secretData": "{\"value\":\"rK898EvJUCJsaW/SWUILYkYSpCWSUNP7kJANNjfq96CmXAYLxZfQIhXqa9NsaCJYxrmJ32vAxE4UQyX+OCOwMA==\",\"salt\":\"sgLJcxFLtka8Mg/GE3N2SQ==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": ["default-roles-turnos_realm"],
+      "notBefore": 0,
+      "groups": []
+    },
+    {
       "id": "dd611d08-43bc-4f3b-9e3b-0eb8a256d057",
       "username": "roman123",
       "firstName": "Roman",
@@ -1432,14 +1458,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-sha256-pairwise-sub-mapper",
             "saml-user-attribute-mapper",
-            "saml-user-property-mapper",
-            "oidc-usermodel-property-mapper",
-            "oidc-usermodel-attribute-mapper",
             "oidc-full-name-mapper",
             "saml-role-list-mapper",
-            "oidc-address-mapper"
+            "oidc-usermodel-attribute-mapper",
+            "saml-user-property-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-address-mapper",
+            "oidc-usermodel-property-mapper"
           ]
         }
       },
@@ -1461,14 +1487,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-full-name-mapper",
             "oidc-usermodel-attribute-mapper",
-            "saml-user-property-mapper",
-            "saml-user-attribute-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
             "oidc-address-mapper",
+            "oidc-full-name-mapper",
             "saml-role-list-mapper",
             "oidc-usermodel-property-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "saml-user-property-mapper",
+            "saml-user-attribute-mapper"
           ]
         }
       }

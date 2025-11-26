@@ -8,15 +8,14 @@ from app.config import settings
 from app.repositories.professional_repository import ProfessionalRepository
 from app.models.professional import Professional
 
-# 1. SWAGGER: Usa la URL pública (localhost) para que el navegador llegue
+# 1. SWAGGER
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl=f"{settings.KEYCLOAK_URL}/protocol/openid-connect/token"
 )
 
-async def get_current_professional(
-    token: str = Depends(oauth2_scheme), 
-    db: Session = Depends(get_db)
-) -> Professional:
+# --- FUNCIÓN AUXILIAR PARA VALIDAR TOKEN (DRY - Don't Repeat Yourself) ---
+async def verify_token(token: str) -> dict:
+    """Valida el token contra Keycloak y devuelve el payload"""
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="No se pudieron validar las credenciales",
@@ -24,14 +23,11 @@ async def get_current_professional(
     )
 
     try:
-        # 2. BACKEND: Usa la URL interna (nombre del contenedor) para la conexión Docker-to-Docker
-        # Usamos la propiedad inteligente que creamos en config.py
         issuer_url = settings.keycloak_issuer 
         jwks_url = f"{issuer_url}/protocol/openid-connect/certs"
         
         async with httpx.AsyncClient() as client:
             response = await client.get(jwks_url)
-            # Si falla la conexión interna, lanzamos error para verlo en logs
             response.raise_for_status()
             jwks = response.json()
 
@@ -56,17 +52,34 @@ async def get_current_professional(
             rsa_key,
             algorithms=[settings.JWT_ALGORITHM],
             audience="account",
-            options={"verify_aud": False}
+            options={"verify_aud": False} # Simplificación para el TP
         )
         
-        email: str = payload.get("email")
-        if email is None:
-            raise credentials_exception
+        return payload
 
     except Exception as e:
-        print(f"Error Auth: {e}") # Debug en logs
+        print(f"Error Auth: {e}")
         raise credentials_exception
 
+# --- DEPENDENCIA 1: USUARIO GENÉRICO (Para Pacientes o Staff) ---
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
+    """Devuelve los datos del usuario (email) sin chequear DB"""
+    payload = await verify_token(token)
+    email: str = payload.get("email")
+    if email is None:
+        raise HTTPException(status_code=401, detail="Token sin email")
+    
+    return {"email": email, "id": payload.get("sub")}
+
+# --- DEPENDENCIA 2: SOLO PROFESIONALES (Para endpoints de médicos) ---
+async def get_current_professional(
+    token: str = Depends(oauth2_scheme), 
+    db: Session = Depends(get_db)
+) -> Professional:
+    """Valida token Y verifica que exista en la tabla Professionals"""
+    payload = await verify_token(token)
+    email: str = payload.get("email")
+    
     repo = ProfessionalRepository(db)
     user = repo.get_by_email(email)
     

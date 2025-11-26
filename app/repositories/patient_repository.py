@@ -27,3 +27,8 @@ class PatientRepository:
 
     def get_all(self, skip: int = 0, limit: int = 100) -> list[Patient]:
         return self.db.query(Patient).offset(skip).limit(limit).all()
+    
+    # Agregado para obtener usuario del email
+    def get_by_email(self, email: str):
+        """Busca un paciente por su email exacto"""
+        return self.db.query(Patient).filter(Patient.email == email).first()

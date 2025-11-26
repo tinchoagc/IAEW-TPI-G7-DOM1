@@ -3,6 +3,8 @@ from typing import Optional
 from datetime import datetime
 from app.models.appointment import AppointmentStatus # Reutilizamos el Enum
 
+from typing import Optional # <--- Asegúrate de tener este import
+
 # --- Schemas de Patient ---
 
 class PatientBase(BaseModel):
@@ -55,7 +57,8 @@ class AppointmentBase(BaseModel):
 
 class AppointmentCreate(AppointmentBase):
     # Al crear un turno, necesitamos saber de quién y para quién
-    patient_id: int
+    # patient_id: int
+    patient_id: Optional[int] = None
     professional_id: int
 
 class Appointment(AppointmentBase):
