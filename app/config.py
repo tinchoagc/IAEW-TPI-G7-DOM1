@@ -5,7 +5,8 @@ class Settings(BaseSettings):
     RABBITMQ_URL: str
     
     # URL Pública (para el navegador/Swagger)
-    KEYCLOAK_URL: str 
+    # Nota: El worker no requiere Keycloak; por eso damos un valor por defecto para evitar fallos.
+    KEYCLOAK_URL: str = "http://keycloak:8080"
     CLIENT_ID: str = "turnos_app" # (Renombramos o aseguramos que coincida con .env)
     
     # URL Interna (para que Docker hable con Docker)
@@ -16,7 +17,8 @@ class Settings(BaseSettings):
     
     # Variables de Observabilidad (Opcionales para config, requeridas por librerías)
     OTEL_SERVICE_NAME: str = "sistema-turnos-api"
-    OTEL_EXPORTER_OTLP_ENDPOINT: str = "http://jaeger:4317"
+    # Usamos HTTP (4318) por compatibilidad con Jaeger all-in-one
+    OTEL_EXPORTER_OTLP_ENDPOINT: str = "http://jaeger:4318/v1/traces"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

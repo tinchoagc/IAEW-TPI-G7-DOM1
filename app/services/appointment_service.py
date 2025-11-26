@@ -44,6 +44,10 @@ class AppointmentService:
             data.patient_id = patient.id
         # -----------------------------------------------------
 
+        # Validar consistencia temporal
+        if data.end_time <= data.start_time:
+            raise HTTPException(status_code=400, detail="La hora de fin debe ser posterior a la hora de inicio")
+
         # 1. Validar paciente (Ahora data.patient_id YA TIENE VALOR sí o sí)
         if not self.patient_repo.get_by_id(data.patient_id):
             raise HTTPException(status_code=404, detail="Paciente no encontrado")
@@ -52,10 +56,18 @@ class AppointmentService:
         if not self.professional_repo.get_by_id(data.professional_id):
             raise HTTPException(status_code=404, detail="Profesional no encontrado")
 
-        # 3. Crear el turno en DB
+        # 3. Validar solapamientos (turnos activos del mismo profesional)
+        if self.appointment_repo.exists_overlap(
+            professional_id=data.professional_id,
+            start_time=data.start_time,
+            end_time=data.end_time
+        ):
+            raise HTTPException(status_code=400, detail="Solapamiento de turno para el profesional")
+
+        # 4. Crear el turno en DB
         new_appointment = self.appointment_repo.create(data)
         
-        # 4. --- EVENTO ASÍNCRONO ---
+        # 5. --- EVENTO ASÍNCRONO ---
         # Publicamos el mensaje en RabbitMQ
         message = {
             "event": "AppointmentCreated",

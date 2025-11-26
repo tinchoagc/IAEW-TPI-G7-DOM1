@@ -68,8 +68,12 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
     email: str = payload.get("email")
     if email is None:
         raise HTTPException(status_code=401, detail="Token sin email")
-    
-    return {"email": email, "id": payload.get("sub")}
+    roles = []
+    try:
+        roles = payload.get("realm_access", {}).get("roles", [])
+    except Exception:
+        roles = []
+    return {"email": email, "id": payload.get("sub"), "roles": roles}
 
 # --- DEPENDENCIA 2: SOLO PROFESIONALES (Para endpoints de médicos) ---
 async def get_current_professional(
@@ -79,6 +83,10 @@ async def get_current_professional(
     """Valida token Y verifica que exista en la tabla Professionals"""
     payload = await verify_token(token)
     email: str = payload.get("email")
+    # Verificamos rol
+    roles = payload.get("realm_access", {}).get("roles", [])
+    if "professional" not in roles and "staff" not in roles:
+        raise HTTPException(status_code=403, detail="Rol insuficiente")
     
     repo = ProfessionalRepository(db)
     user = repo.get_by_email(email)

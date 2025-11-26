@@ -91,7 +91,23 @@ class ReminderConsumer:
 
     async def consume(self):
         print("🐰 [ReminderConsumer] Conectando a RabbitMQ...")
-        connection = await aio_pika.connect_robust(settings.RABBITMQ_URL)
+        # Intentos de conexión con backoff para evitar crash en arranque del stack
+        max_retries = 10
+        delay = 2
+        connection = None
+        for attempt in range(1, max_retries + 1):
+            try:
+                connection = await aio_pika.connect_robust(settings.RABBITMQ_URL)
+                break
+            except Exception as e:
+                print(f"⚠️ [ReminderConsumer] Fallo conectando a RabbitMQ (intento {attempt}/{max_retries}): {e}")
+                await asyncio.sleep(delay)
+                delay = min(delay * 2, 30)
+
+        if connection is None:
+            print("❌ [ReminderConsumer] No se pudo conectar a RabbitMQ tras varios intentos. Saliendo.")
+            return
+
         channel = await connection.channel()
         
         exchange = await channel.declare_exchange('topic_exchange', aio_pika.ExchangeType.TOPIC, durable=True)

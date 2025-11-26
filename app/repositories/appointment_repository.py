@@ -29,3 +29,17 @@ class AppointmentRepository:
     def get_by_professional(self, professional_id: int) -> list[Appointment]:
         """Devuelve todos los turnos de un médico específico"""
         return self.db.query(Appointment).filter(Appointment.professional_id == professional_id).all()
+
+    def exists_overlap(self, professional_id: int, start_time, end_time) -> bool:
+        """Verifica si existe solapamiento de turnos para el mismo profesional.
+        Criterio: (start_time < existing.end_time) AND (end_time > existing.start_time)
+        Ignora turnos CANCELLED.
+        """
+        q = (
+            self.db.query(Appointment)
+            .filter(Appointment.professional_id == professional_id)
+            .filter(Appointment.status != 'CANCELLED')
+            .filter(Appointment.start_time < end_time)
+            .filter(Appointment.end_time > start_time)
+        )
+        return self.db.query(q.exists()).scalar()

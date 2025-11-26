@@ -32,3 +32,24 @@ class PatientRepository:
     def get_by_email(self, email: str):
         """Busca un paciente por su email exacto"""
         return self.db.query(Patient).filter(Patient.email == email).first()
+
+    def update(self, patient_id: int, data: PatientCreate) -> Patient | None:
+        patient = self.get_by_id(patient_id)
+        if not patient:
+            return None
+        patient.first_name = data.first_name
+        patient.last_name = data.last_name
+        patient.email = data.email
+        patient.phone = data.phone
+        self.db.add(patient)
+        self.db.commit()
+        self.db.refresh(patient)
+        return patient
+
+    def delete(self, patient_id: int) -> bool:
+        patient = self.get_by_id(patient_id)
+        if not patient:
+            return False
+        self.db.delete(patient)
+        self.db.commit()
+        return True

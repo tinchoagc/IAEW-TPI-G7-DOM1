@@ -4,8 +4,8 @@ Trabajo Práctico Integrador para la materia **Ingeniería de Aplicaciones Web (
 
 Este proyecto implementa una solución de backend completa para la reserva de turnos médicos, utilizando una arquitectura de microservicios contenerizada. Cumple con patrones de diseño modernos, seguridad delegada, comunicación asincrónica y observabilidad completa.
 
-> **Estado del Proyecto:** Etapa 1 (Finalizada)
-> **Tag de Release:** `v1.0.0` > **fecha entrega:** `26/10/2025`
+> **Estado del Proyecto:** Etapa 2 (Finalizada)
+> **Tag de Release:** `v1.0.0` · **Fecha de entrega:** `27/11/2025`
 
 ## Diagramas C4 — Arquitectura del Sistema
 
@@ -364,7 +364,7 @@ El sistema está diseñado para levantarse con un solo comando, incluyendo la co
     **Opción B (Manual):**
 
     ```bash
-    docker-compose up -d --build
+    docker compose up -d --build
     ```
 
 3.  **Verificar:** Esperar unos segundos hasta que todos los contenedores estén en estado `running`.
@@ -414,27 +414,58 @@ Estructura del servicio de procesamiento en segundo plano.
 
 ---
 
-## 🧪 4. Pruebas y Validación
+### 🧪 4. Pruebas y Validación
 
 ### Colección de Postman
 
-Se incluye una colección completa para probar el flujo de negocio (Login, Crear Paciente, Crear Turno, Consultar Agenda).
+Se incluye una colección para probar el flujo de negocio (Crear Paciente, Crear Profesional, Crear Turno, Confirmar/Cancelar Turno):
 
-- **Ubicación:** [`/docs/postman/SistemaTurnos.postman_collection.json`](./docs/postman/SistemaTurnos.postman_collection.json)
+- **Ubicación:** [`docs/postman/SistemaTurnos.postman_collection.json`](./docs/postman/SistemaTurnos.postman_collection.json)
+- **Uso:** importar en Postman e ingresar `{{token}}` (variable) con un JWT válido obtenido de Keycloak.
 
-### Prueba de Carga
+#### Obtener token rápidamente (sin `jq`):
 
-Se realizó una prueba de estrés simulando **20 usuarios concurrentes** creando turnos durante 1 minuto para validar la estabilidad y el rendimiento del broker.
+```bash
+TOKEN=$(curl -s -X POST "http://localhost:8080/realms/turnos_realm/protocol/openid-connect/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  --data-urlencode "client_id=turnos_app" \
+  --data-urlencode "grant_type=password" \
+  --data-urlencode "username=roman123" \
+  --data-urlencode "password=123456" \
+  | sed -n 's/.*"access_token":"\([^"]*\)".*/\1/p')
+```
 
-- **Resultado:** 0% de tasa de error y latencia controlada.
-- **Evidencia:**
-  ![Reporte de Carga](docs/img/load_test_result.png)
+Luego, en Postman, seteá la variable `token` con el valor de `$TOKEN`.
+
+### Prueba de Carga (resumen)
+
+Se recomienda ejecutar una prueba de estrés con 20 usuarios durante 1 minuto para validar throughput y estabilidad.
+
+- **Resultado esperado:** tasa de error ~0% y latencia controlada.
 
 ---
 
-## 👁️ 5. Observabilidad (Métricas y Trazas)
+## 👁️ 5. Observabilidad (Métricas, Trazas y Logs JSON)
 
-El sistema implementa el stack completo de **OpenTelemetry** para cumplir con los requisitos de monitoreo.
+El sistema implementa el stack completo de **OpenTelemetry** y métricas **Prometheus**. Además, los logs de la aplicación están en **formato JSON** con **correlation ID** por request.
+
+### Logs JSON + Request ID
+
+- Cada request genera/propaga un `X-Request-ID` devuelto en la respuesta.
+- El mismo ID queda disponible en el servidor como `request.state.request_id` y se incluye en los logs.
+- Los logs se emiten en JSON (apto para agregadores y búsquedas estructuradas).
+
+Ejemplo de ver logs del contenedor API:
+
+```bash
+docker logs -f api_turnos
+```
+
+Ver el header en una respuesta:
+
+```bash
+curl -i http://localhost:8000/health | grep -i x-request-id
+```
 
 ### Dashboard de Métricas (Grafana)
 
@@ -443,12 +474,14 @@ Panel en tiempo real configurado con las métricas clave solicitadas:
 1.  **Throughput:** Tráfico total (Peticiones por segundo).
 2.  **Latencia p95:** Velocidad de respuesta.
 3.  **Error Rate:** Monitoreo de fallos HTTP 5xx.
+Además, las métricas están expuestas en `GET /metrics` (Prometheus exposition format).
 
 ![Dashboard Grafana](docs/img/grafana_dashboard.png)
 
 ### Trazas Distribuidas (Jaeger)
 
 Permite visualizar el "Waterfall" de cada petición, correlacionando el tiempo gastado en la API y en la Base de Datos.
+Para ver las trazas, navegar a Jaeger y seleccionar el servicio `sistema-turnos-api`.
 ![Trazas Jaeger](docs/img/jaeger_trace.png)
 
 ---
@@ -459,15 +492,19 @@ Permite visualizar el "Waterfall" de cada petición, correlacionando el tiempo g
 
 El sistema desacopla el envío de notificaciones críticas.
 
-1.  Al crear un turno (`POST /appointments`), la API responde inmediatamente al usuario y publica el evento `AppointmentCreated`.
+1.  Al crear un turno (`POST /appointments`), la API responde inmediatamente al usuario y publica el evento `ReminderRequested`.
 2.  El servicio **Worker** consume el mensaje en segundo plano para procesar el recordatorio.
-3.  **Verificación:** Observar los logs del worker: `docker logs worker_turnos`.
+3.  **Verificación:** Observar los logs del worker:
+
+```bash
+docker logs -f worker_turnos
+```
 
 ### Integración (Webhook)
 
 El sistema notifica cambios de estado a sistemas externos (ej: Obras Sociales).
 
-1.  Al cambiar el estado de un turno (`PATCH /appointments/{id}/status`), se dispara un POST a la URL configurada.
+1.  Al cambiar el estado de un turno (`PATCH /appointments/{id}/status`), se dispara un POST firmado (HMAC) a la URL configurada.
 2.  **Prueba:** Se puede usar [Webhook.site](https://webhook.site) como parámetro `webhook_url` en el endpoint para ver la notificación en vivo.
 
 ---
@@ -489,4 +526,4 @@ Resumen de las decisiones técnicas documentadas.
 
 ### Notas sobre el Alcance (MVP)
 
-Para esta versión `v1.0.0`, se asume que el sistema es utilizado por el personal administrativo (Staff) o Profesionales. El rol de "Paciente" es gestionado como una entidad de datos, no como un usuario autenticado del sistema, simplificando el modelo de seguridad para cumplir con los plazos del TPI.
+Para esta versión `v1.0.0`, se asume que el sistema es utilizado por el personal administrativo (Staff) o Profesionales. El rol de "Paciente" se gestiona como una entidad de datos; no requiere autenticación propia en el sistema.

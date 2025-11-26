@@ -27,3 +27,24 @@ class ProfessionalRepository:
 
     def get_all(self, skip: int = 0, limit: int = 100) -> list[Professional]:
         return self.db.query(Professional).offset(skip).limit(limit).all()
+
+    def update(self, professional_id: int, data: ProfessionalCreate) -> Professional | None:
+        professional = self.get_by_id(professional_id)
+        if not professional:
+            return None
+        professional.first_name = data.first_name
+        professional.last_name = data.last_name
+        professional.email = data.email
+        professional.specialty = data.specialty
+        self.db.add(professional)
+        self.db.commit()
+        self.db.refresh(professional)
+        return professional
+
+    def delete(self, professional_id: int) -> bool:
+        professional = self.get_by_id(professional_id)
+        if not professional:
+            return False
+        self.db.delete(professional)
+        self.db.commit()
+        return True

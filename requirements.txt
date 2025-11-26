@@ -26,3 +26,4 @@ opentelemetry-instrumentation-sqlalchemy
 opentelemetry-exporter-otlp
 prometheus-client
 opentelemetry-exporter-otlp-proto-http
+python-json-logger==2.0.7
