@@ -490,3 +490,5 @@ Resumen de las decisiones técnicas documentadas.
 ### Notas sobre el Alcance (MVP)
 
 Para esta versión `v1.0.0`, se asume que el sistema es utilizado por el personal administrativo (Staff) o Profesionales. El rol de "Paciente" es gestionado como una entidad de datos, no como un usuario autenticado del sistema, simplificando el modelo de seguridad para cumplir con los plazos del TPI.
+
+Implemetacion Auth estricto
