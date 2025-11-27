@@ -12,7 +12,8 @@ broker/.venv/
 
 # Archivos de configuración/secretos
 .env
-.env.* 
+.env.*
+!.env.example
 *.env
 secrets/
 *.key
