@@ -179,4 +179,4 @@ Documentación resumida de las decisiones técnicas.
 ### 📦 Entrega
 
 - **Versión:** `v1.0.0`
-- **Commit Hash:** [PEGAR_TU_HASH_AQUI]
+- **Commit Hash:** bf141bd
